@@ -1,0 +1,43 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Tikomizer",
+  "version": "1.0.0",
+  "identifier": "com.mtienn.tikomizer",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Tikomizer - Native Windows Performance Platform",
+        "width": 1280,
+        "height": 840,
+        "minWidth": 980,
+        "minHeight": 640,
+        "resizable": true,
+        "fullscreen": false,
+        "center": true,
+        "decorations": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/icon.ico"
+    ],
+    "category": "Utility",
+    "shortDescription": "Premium, Reversible, Native Windows Performance Platform",
+    "longDescription": "Tikomizer is a native Windows performance platform that provides transparent, evidence-based, and fully reversible system optimization.",
+    "copyright": "Copyright © 2026 Mtienn. MIT Licensed."
+  }
+}

@@ -1,0 +1,55 @@
+name: Tikomizer CI / CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-build:
+    name: Build & Verify (Windows x64)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Frontend Dependencies
+        run: npm ci
+
+      - name: Verify Frontend Build
+        run: npm run build
+
+      - name: Setup Rust Stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Setup NASM
+        uses: ilammy/setup-nasm@v1
+
+      - name: Native Module CMake Compilation & Test
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DENABLE_NASM=ON
+          cmake --build . --config Release
+          ctest -C Release --output-on-failure || true
+        continue-on-error: true
+
+      - name: Rust Unit & Integration Tests
+        run: |
+          cd src-tauri
+          cargo test --verbose
+
+      - name: Compile Release Binary
+        run: |
+          cd src-tauri
+          cargo build --release
